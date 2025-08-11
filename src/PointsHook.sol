@@ -65,7 +65,7 @@ contract PointsHook is BaseHook, ERC1155 {
         if (user == address(0)) return;
 
         // Mint points to the user
-        uint256 poolIdUnit = uint256(PoolId.unwrap(poolId));
+        uint256 poolIdUint = uint256(PoolId.unwrap(poolId));
         _mint(user, poolIdUint, points, "");
     }
 
@@ -81,7 +81,7 @@ contract PointsHook is BaseHook, ERC1155 {
         if (!key.currency0.isAddressZero()) return (this.afterSwap.selector, 0);
 
         // We only mint points if user is buying TOKEN with ETH
-        if (!SwapParams.zeroForOne) return (this.afterSwap.selector, 0);
+        if (!swapParams.zeroForOne) return (this.afterSwap.selector, 0);
 
         // Mint points equal to 20% of the amount of ETH they spent
         // Since its a zeroForOne swap:
@@ -96,7 +96,7 @@ contract PointsHook is BaseHook, ERC1155 {
         uint256 pointsForSwap = ethSpendAmount / 5;
 
         // Mint the points
-        _assignPoints(key.toId, hookData, pointsForSwap);
+        _assignPoints(key.toId(), hookData, pointsForSwap);
 
         return (this.afterSwap.selector, 0);
     }
