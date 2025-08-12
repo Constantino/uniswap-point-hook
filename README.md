@@ -1,5 +1,3 @@
-
-```
 # uniswap-point-hook
 
 Project inspired and taken as baseline from: https://github.com/haardikk21/points-hook, as shown in the Uniswap Hook Incubator by Atrium Academy.
@@ -33,8 +31,6 @@ Extended test coverage includes:
 - **Compound Points Tests**: Ensures points accumulate correctly over multiple swaps
 - **Edge Case Testing**: Covers boundary conditions and edge scenarios
 - **Gas Optimization Tests**: Validates efficient execution
-
-
 
 ## Usage
 
