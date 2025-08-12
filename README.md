@@ -1,17 +1,38 @@
-## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+```
+# uniswap-point-hook
 
-Foundry consists of:
+A Uniswap V4 hook that implements a points-based reward system for users based on their swap activity and quantity levels.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Points System
 
-## Documentation
+This hook implements a tiered points reward system that incentivizes users based on their swap behavior:
 
-https://book.getfoundry.sh/
+- **First Swap**: Users receive 2% points on their swap amount
+- **2+ Swaps**: Users receive 4% points on their swap amount  
+- **5+ Swaps**: Users receive 5% points on their swap amount
+- **10+ Swaps**: Users receive 10% points on their swap amount
+- **15+ Swaps**: Users receive 20% points on their swap amount
+
+The system tracks each user's swap count and automatically applies the appropriate points multiplier. Points are calculated as a percentage of the swap amount and can compound over multiple transactions.
+
+## Features
+
+- **Automatic Points Calculation**: Points are automatically calculated and distributed based on swap quantities
+- **Tiered Reward System**: Progressive rewards encourage continued engagement
+- **User Tracking**: Maintains swap count per user address
+- **Compound Points**: Users can accumulate points across multiple swaps
+- **Gas Efficient**: Optimized for minimal gas overhead during swaps
+
+## Testing
+
+Extended test coverage includes:
+- **Points Calculation Tests**: Verifies correct points distribution across all tiers
+- **Compound Points Tests**: Ensures points accumulate correctly over multiple swaps
+- **Edge Case Testing**: Covers boundary conditions and edge scenarios
+- **Gas Optimization Tests**: Validates efficient execution
+
+
 
 ## Usage
 
@@ -63,5 +84,3 @@ $ cast <subcommand>
 $ forge --help
 $ anvil --help
 $ cast --help
-```
-# uniswap-point-hook
