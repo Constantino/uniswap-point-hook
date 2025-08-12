@@ -49,6 +49,9 @@ contract PointsHook is BaseHook, ERC1155 {
         return "https://api.example.com/token/{id}";
     }
 
+    mapping(address => uint256) private _swapsPerUser;
+    uint256[] private _levelOfReward = [20, 10, 5, 4, 2];
+
     function _assignPoints(
         PoolId poolId,
         bytes calldata hookData,
@@ -67,6 +70,27 @@ contract PointsHook is BaseHook, ERC1155 {
         // Mint points to the user
         uint256 poolIdUint = uint256(PoolId.unwrap(poolId));
         _mint(user, poolIdUint, points, "");
+    }
+
+    function calculatePoints(
+        bytes calldata hookData,
+        uint256 ethAmount
+    ) public view returns (uint256) {
+        // Extract user address from hookData
+        address user = abi.decode(hookData, (address));
+        uint256 userSwaps = _swapsPerUser[user];
+
+        if (userSwaps < 1) {
+            return ethAmount / (100 / _levelOfReward[4]);
+        } else if (userSwaps >= 1 && userSwaps < 5) {
+            return ethAmount / (100 / _levelOfReward[3]);
+        } else if (userSwaps >= 5 && userSwaps < 10) {
+            return ethAmount / (100 / _levelOfReward[2]);
+        } else if (userSwaps >= 10 && userSwaps < 15) {
+            return ethAmount / (100 / _levelOfReward[1]);
+        } else if (userSwaps >= 15) {
+            return ethAmount / (100 / _levelOfReward[0]);
+        }
     }
 
     // Stub implementation of `afterSwap`
@@ -93,10 +117,13 @@ contract PointsHook is BaseHook, ERC1155 {
         //  amount of ETH they spent is equal to BalanceDelta.amount0()
 
         uint256 ethSpendAmount = uint256(int256(-delta.amount0()));
-        uint256 pointsForSwap = ethSpendAmount / 5;
+        uint256 pointsForSwap = calculatePoints(hookData, ethSpendAmount);
 
         // Mint the points
         _assignPoints(key.toId(), hookData, pointsForSwap);
+
+        address user = abi.decode(hookData, (address));
+        _swapsPerUser[user] += 1;
 
         return (this.afterSwap.selector, 0);
     }
