@@ -2,6 +2,8 @@
 ```
 # uniswap-point-hook
 
+Project inspired and taken as baseline from: https://github.com/haardikk21/points-hook, as shown in the Uniswap Hook Incubator by Atrium Academy.
+
 A Uniswap V4 hook that implements a points-based reward system for users based on their swap activity and quantity levels.
 
 ## Points System
